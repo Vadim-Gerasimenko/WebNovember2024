@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+}
+
+.users-table {
+    font: 16px "Trebuchet MS";
+    text-align: left;
+    width: 100vw;
+    border-collapse: collapse;
+}
+
+.users-table .head {
+    color: #fff;
+    background-color: #3598db;
+}
+
+.users-table tbody tr:nth-child(odd) {
+    background-color: #eee;
+}
+
+.users-table tr th, td {
+    height: 52px;
+    padding-left: 12px;
+    border: 1px solid;
+}
+
+.users-table th {
+    border-color: #bdd6e5;
+}
+
+.users-table td {
+    border-color: #cfcfcf;
+}
