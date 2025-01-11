@@ -1,0 +1,62 @@
+* {
+    box-sizing: border-box;
+}
+
+.task {
+    font: 14px "American Typewriter";
+    margin-left: 1em;
+}
+
+.title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.add-button, .save-button, .cancel-button, .edit-button, .delete-button,
+.new-todo-text-field, .edit-todo-text-area {
+    border: 1px solid #000;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 1px 0.5em;
+}
+
+.new-todo-form > * {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.new-todo-text-field, .edit-todo-text-area {
+    min-width: 250px;
+}
+
+.cancel-button, .delete-button {
+    background-color: #dcdcdc;
+}
+
+.invalid ~ .error-message, .new-todo-form .label {
+    display: block;
+}
+
+.todo-list > li {
+    margin-top: 1em;
+}
+
+.error-message {
+    color: #f00;
+    display: none;
+    margin-top: 0.5em;
+}
+
+.invalid {
+    border-color: #f00;
+}
+
+.todo-text {
+    display: inline-block;
+}
+
+.new-todo-label {
+    display: block;
+    margin-bottom: 0.5em;
+}
