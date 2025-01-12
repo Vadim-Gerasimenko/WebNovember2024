@@ -13,8 +13,7 @@
     margin-bottom: 0.5em;
 }
 
-.add-button, .save-button, .cancel-button, .edit-button, .delete-button,
-.new-todo-text-field, .edit-todo-text-area {
+.base-button, .base-text-field {
     border: 1px solid #000;
     border-radius: 4px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -30,7 +29,11 @@
     min-width: 250px;
 }
 
-.cancel-button, .delete-button {
+.base-button:hover {
+    background-color: #efefef;
+}
+
+.base-button:active {
     background-color: #dcdcdc;
 }
 
