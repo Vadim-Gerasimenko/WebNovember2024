@@ -75,5 +75,5 @@ document.addEventListener("DOMContentLoaded", function () {
         setViewMode();
         todoList.appendChild(newTodoItem);
         newTodoTextField.value = "";
-    })
+    });
 });
