@@ -1,0 +1,61 @@
+* {
+    box-sizing: border-box;
+}
+
+.temperature-converter {
+    font: 14px "American Typewriter";
+    margin-left: 1em;
+}
+
+.title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.temperature-input-field, .convert-button {
+    border: 1px solid #000;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 1px 0.5em;
+}
+
+.convert-button:hover {
+    background-color: #efefef;
+}
+
+.convert-button:active {
+    background-color: #dcdcdc;
+}
+
+.temperature-input-field {
+    min-width: 300px;
+}
+
+.temperature-conversion-form > * {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.input-temperature-label {
+    margin-bottom: 0.5em;
+    display: block;
+}
+
+.error-message {
+    color: #f00;
+    display: none;
+    margin-top: 0.5em;
+}
+
+.empty-field, .incorrect-value {
+    border-color: #f00;
+}
+
+.empty-field ~ #empty-field-error-message, .incorrect-value ~ #incorrect-value-error-message {
+    display: block;
+}
+
+.converted-temperature {
+    margin-top: 1em;
+}
