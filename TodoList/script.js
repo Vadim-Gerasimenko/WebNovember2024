@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
             newTodoItem.innerHTML = `
                 <div>
                     <div class="todo-text"></div>
-                    <button class="edit-button" type="button">Редактировать</button>
-                    <button class="delete-button" type="button">Удалить </button>
+                    <button class="base-button edit-button" type="button">Редактировать</button>
+                    <button class="base-button delete-button" type="button">Удалить </button>
                 </div>
             `;
 
@@ -30,9 +30,9 @@ document.addEventListener("DOMContentLoaded", function () {
             newTodoItem.querySelector(".edit-button").addEventListener("click", function () {
                 newTodoItem.innerHTML = `
                     <div>
-                        <textarea class="edit-todo-text-area"></textarea>
-                        <button class="save-button" type="button">Сохранить</button>
-                        <button class="cancel-button" type="button">Отмена</button>
+                        <textarea class="base-text-field edit-todo-text-area"></textarea>
+                        <button class="base-button save-button" type="button">Сохранить</button>
+                        <button class="base-button cancel-button" type="button">Отмена</button>
                         <div class="error-message">Необходимо задать значение</div>
                     </div>
                 `;
