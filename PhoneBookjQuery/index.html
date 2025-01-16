@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Телефонная книга</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</head>
+<body>
+<div class="container">
+    <h1 class="mt-3">Телефонная книга</h1>
+    <div class="pt-4 pb-4">
+        <label for="contact-adding-form" class="mb-1 text-body-secondary">Добавить контакт</label>
+        <form class="row needs-validation pt-2 pb-1 ps-3 border rounded-2 w-75" id="contact-adding-form">
+            <div class="col-auto col-sm-4 mb-1">
+                <label for="last-name-input-field"></label>
+                <input type="text" class="form-control" placeholder="Фамилия" id="last-name-input-field">
+                <div class="invalid-feedback">
+                    Введите фамилию
+                </div>
+            </div>
+            <div class="col-auto mb-1">
+                <label for="first-name-input-field"></label>
+                <input type="text" class="form-control" placeholder="Имя" id="first-name-input-field">
+                <div class="invalid-feedback">
+                    Введите имя
+                </div>
+            </div>
+            <div class="col-auto mb-1">
+                <label for="phone-number-input-field"></label>
+                <input type="text" class="form-control" placeholder="Номер телефона" id="phone-number-input-field">
+                <div class="invalid-feedback">
+                    Введите номер телефона
+                </div>
+            </div>
+            <div class="col-sm-1 mb-1">
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            </div>
+        </form>
+    </div>
+    <div class="row table-responsive">
+        <table class="table table-hover table-bordered caption-top rounded-2" id="contacts-table">
+            <caption class="ms-2">Контакты</caption>
+            <thead class="table-head">
+            <tr>
+                <th class="col-1">#</th>
+                <th class="col-3">Фамилия</th>
+                <th class="col-2">Имя</th>
+                <th class="col-4">Номер</th>
+                <th class="col-2"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="no-contacts-info-message">
+                <td colspan="5" class="col text-center"> Контакты отсутствуют.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
