@@ -10,55 +10,121 @@
     <script src="script.js"></script>
 </head>
 <body>
-<div class="container">
-    <h1 class="mt-3">Телефонная книга</h1>
-    <div class="pt-4 pb-4">
-        <label for="contact-adding-form" class="mb-1 text-body-secondary">Добавить контакт</label>
-        <form class="row needs-validation pt-2 pb-1 ps-3 border rounded-2 w-75" id="contact-adding-form">
-            <div class="col-auto col-sm-4 mb-1">
+<div class="container" id="phone-book">
+    <h1 class="mt-3 mb-4">Телефонная книга</h1>
+    <button class="btn btn-outline-primary border-0" type="button" data-bs-toggle="collapse"
+            data-bs-target="#contact-adding-form" aria-expanded="false" aria-controls="contact-adding-form">
+        Добавить контакт
+    </button>
+    <div class="pb-4">
+        <form id="contact-adding-form" class="collapse row needs-validation ps-3">
+            <div class="col-3">
                 <label for="last-name-input-field"></label>
-                <input type="text" class="form-control" placeholder="Фамилия" id="last-name-input-field">
-                <div class="invalid-feedback">
-                    Введите фамилию
-                </div>
+                <input id="last-name-input-field" type="text" class="form-control last-name" placeholder="Фамилия">
+                <div class="invalid-feedback">Введите фамилию</div>
             </div>
-            <div class="col-auto mb-1">
+            <div class="col-2">
                 <label for="first-name-input-field"></label>
-                <input type="text" class="form-control" placeholder="Имя" id="first-name-input-field">
-                <div class="invalid-feedback">
-                    Введите имя
-                </div>
+                <input id="first-name-input-field" type="text" class="form-control first-name" placeholder="Имя">
+                <div class="invalid-feedback">Введите имя</div>
             </div>
-            <div class="col-auto mb-1">
+            <div class="col-3">
                 <label for="phone-number-input-field"></label>
-                <input type="text" class="form-control" placeholder="Номер телефона" id="phone-number-input-field">
-                <div class="invalid-feedback">
-                    Введите номер телефона
-                </div>
+                <input id="phone-number-input-field" type="text" class="form-control text-truncate phone-number"
+                       placeholder="Номер телефона">
+                <div class="invalid-feedback">Введите номер телефона</div>
             </div>
-            <div class="col-sm-1 mb-1">
-                <button type="submit" class="btn btn-primary">Добавить</button>
+            <div class="col-2 align-content-start pt-4">
+                <button type="submit" class="btn btn-outline-primary">Добавить</button>
+                <button id="contact-adding-collapse-close-button" type="button" class="btn-close ms-3"></button>
             </div>
         </form>
     </div>
     <div class="row table-responsive">
-        <table class="table table-hover table-bordered caption-top rounded-2" id="contacts-table">
+        <table id="contacts-table" class="table table-sm caption-top table-hover rounded-2">
             <caption class="ms-2">Контакты</caption>
-            <thead class="table-head">
+            <thead class="table-head table-light">
             <tr>
                 <th class="col-1">#</th>
                 <th class="col-3">Фамилия</th>
                 <th class="col-2">Имя</th>
-                <th class="col-4">Номер</th>
-                <th class="col-2"></th>
+                <th class="col-4">Номер телефона</th>
             </tr>
             </thead>
             <tbody>
-            <tr id="no-contacts-info-message">
-                <td colspan="5" class="col text-center"> Контакты отсутствуют.</td>
+            <tr id="empty-contacts-table-message">
+                <td colspan="4" class="col text-center"> Контакты отсутствуют.</td>
             </tr>
             </tbody>
         </table>
+
+        <div class="modal fade" id="contact-delete-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Подтвердите удаление</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Вы уверены, что хотите удалить следующий контакт?
+                        </p>
+                        <div>
+                            <span class="fw-semibold">Данные контакта:</span>
+                            <span class="last-name"></span>
+                            <span class="first-name"></span>
+                        </div>
+                        <div>
+                            <span class="fw-semibold">Номер телефона:</span>
+                            <span class="phone-number"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger delete-button btn-sm">
+                            Удалить
+                        </button>
+                        <button type="button" class="btn btn-secondary cancel-button btn-sm" data-bs-dismiss="modal">
+                            Отмена
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="contact-edit-modal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Изменение контактных данных</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <label for="last-name-edit-input-field">Фамилия</label>
+                            <input id="last-name-edit-input-field" type="text" class="form-control last-name">
+                            <div class="invalid-feedback">Введите фамилию</div>
+                        </div>
+                        <div>
+                            <label for="first-name-edit-input-field">Имя</label>
+                            <input id="first-name-edit-input-field" type="text" class="form-control first-name">
+                            <div class="invalid-feedback">Введите имя</div>
+                        </div>
+                        <div>
+                            <label for="phone-number-edit-input-field">Номер телефона</label>
+                            <input id="phone-number-edit-input-field" type="text"
+                                   class="form-control text-truncate phone-number">
+                            <div class="invalid-feedback">Введите номер телефона</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary save-changes-button btn-sm">Сохранить</button>
+                        <button type="button" class="btn btn-secondary cancel-button btn-sm" data-bs-dismiss="modal">
+                            Отмена
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
