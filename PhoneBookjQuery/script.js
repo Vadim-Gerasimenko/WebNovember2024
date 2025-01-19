@@ -6,6 +6,7 @@ $(document).ready(function () {
     const tableRows = [];
 
     const emptyTableMessage = $("#empty-contacts-table-message");
+    const allSelectionCheckboxHead = $("#all-selection-checkbox-head");
 
     const deleteModalElement = $("#contact-delete-modal");
     const deleteModalDialog = new bootstrap.Modal(deleteModalElement);
@@ -39,6 +40,19 @@ $(document).ready(function () {
         }
     }
 
+    $("#all-selection-checkbox").change(function () {
+        function changeAllCheckboxes(isChecked) {
+            $(tableRows).each((_, row) => $(row).find(".checkbox").prop("checked", isChecked));
+        }
+
+        if (this.checked) {
+            changeAllCheckboxes(true);
+            return;
+        }
+
+        changeAllCheckboxes(false);
+    });
+
     addingCollapseCloseButton.click(function () {
         addingCollapse.hide();
 
@@ -55,10 +69,13 @@ $(document).ready(function () {
         const contactIndex = tableRows.length;
 
         if (contactIndex === 0) {
+            $("#all-selection-checkbox").prop("checked", false);
+            $(allSelectionCheckboxHead).removeClass("d-none");
             emptyTableMessage.hide();
         }
 
         const tableRow = $("<tr>")
+            .append($("<td>").append($("<input>").addClass("form-check-input checkbox").attr("type", "checkbox")))
             .append($("<td>").addClass("contact-position").text(contactIndex + 1))
             .append($("<td>").addClass("last-name").text(contact.lastName))
             .append($("<td>").addClass("first-name").text(contact.firstName))
@@ -134,6 +151,8 @@ $(document).ready(function () {
                         }
 
                         if (tableRows.length === 0) {
+                            allSelectionCheckboxHead.addClass("d-none");
+
                             emptyTableMessage.show();
                         }
 
