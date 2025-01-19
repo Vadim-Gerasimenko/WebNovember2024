@@ -10,14 +10,14 @@
     <script src="script.js"></script>
 </head>
 <body>
-<div class="container" id="phone-book">
+<div id="phone-book" class="container">
     <h1 class="mt-3 mb-4">Телефонная книга</h1>
     <button class="btn btn-outline-primary border-0" type="button" data-bs-toggle="collapse"
             data-bs-target="#contact-adding-form" aria-expanded="false" aria-controls="contact-adding-form">
         Добавить контакт
     </button>
     <div class="pb-4">
-        <form id="contact-adding-form" class="collapse row needs-validation ps-3">
+        <form id="contact-adding-form" class="collapse row needs-validation ps-3 mh-100">
             <div class="col-3">
                 <label for="last-name-input-field"></label>
                 <input id="last-name-input-field" type="text" class="form-control last-name" placeholder="Фамилия">
@@ -58,7 +58,7 @@
             </tbody>
         </table>
 
-        <div class="modal fade" id="contact-delete-modal" tabindex="-1" aria-hidden="true">
+        <div id="contact-delete-modal" class="modal fade" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -91,7 +91,8 @@
             </div>
         </div>
 
-        <div class="modal fade" id="contact-edit-modal" tabindex="-1" aria-hidden="true">
+        <div id="contact-edit-modal" class="modal fade" data-bs-backdrop="static" data-bs-keyboard="false"
+             tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -121,6 +122,25 @@
                         <button type="button" class="btn btn-secondary cancel-button btn-sm" data-bs-dismiss="modal">
                             Отмена
                         </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="existing-contact-modal" class="modal fade" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-warning-subtle ">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5">Предупреждение</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="fw-light">Контакт с телефонным номером</span>
+                        <span class="fw-semibold phone-number"></span>
+                        <span class="fw-light">уже существует.</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Закрыть</button>
                     </div>
                 </div>
             </div>
