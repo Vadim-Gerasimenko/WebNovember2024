@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Телефонная книга</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <script src="node_modules/jquery/dist/jquery.min.js"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -16,29 +17,31 @@
             data-bs-target="#contact-adding-form" aria-expanded="false" aria-controls="contact-adding-form">
         Добавить контакт
     </button>
-    <div class="pb-4">
-        <form id="contact-adding-form" class="collapse row needs-validation ps-3 mh-100">
-            <div class="col-3">
-                <label for="last-name-input-field"></label>
-                <input id="last-name-input-field" type="text" class="form-control last-name" placeholder="Фамилия">
-                <div class="invalid-feedback">Введите фамилию</div>
-            </div>
-            <div class="col-2">
-                <label for="first-name-input-field"></label>
-                <input id="first-name-input-field" type="text" class="form-control first-name" placeholder="Имя">
-                <div class="invalid-feedback">Введите имя</div>
-            </div>
-            <div class="col-3">
-                <label for="phone-number-input-field"></label>
-                <input id="phone-number-input-field" type="text" class="form-control text-truncate phone-number"
-                       placeholder="Номер телефона">
-                <div class="invalid-feedback">Введите номер телефона</div>
-            </div>
-            <div class="col-2 align-content-start pt-4">
-                <button type="submit" class="btn btn-outline-primary">Добавить</button>
-                <button id="contact-adding-collapse-close-button" type="button" class="btn-close ms-3"></button>
-            </div>
-        </form>
+    <div class="pt-3">
+        <div class="adding-collapse-body">
+            <form id="contact-adding-form" class="collapse row needs-validation ps-3">
+                <div class="col-3 input-block-min-height">
+                    <label for="last-name-input-field"></label>
+                    <input id="last-name-input-field" type="text" class="form-control last-name" placeholder="Фамилия">
+                    <div class="invalid-feedback">Введите фамилию</div>
+                </div>
+                <div class="col-2 input-block-min-height">
+                    <label for="first-name-input-field"></label>
+                    <input id="first-name-input-field" type="text" class="form-control first-name" placeholder="Имя">
+                    <div class="invalid-feedback">Введите имя</div>
+                </div>
+                <div class="col-3 input-block-min-height">
+                    <label for="phone-number-input-field"></label>
+                    <input id="phone-number-input-field" type="text" class="form-control text-truncate phone-number"
+                           placeholder="Номер телефона">
+                    <div class="invalid-feedback">Введите номер телефона</div>
+                </div>
+                <div class="col-2 align-content-start pt-4">
+                    <button type="submit" class="btn btn-outline-primary">Добавить</button>
+                    <button id="contact-adding-collapse-close-button" type="button" class="btn-close ms-3"></button>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="row table-responsive">
         <table id="contacts-table" class="table table-sm caption-top table-hover rounded-2">
@@ -100,17 +103,17 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <div>
+                        <div class="input-block-min-height">
                             <label for="last-name-edit-input-field">Фамилия</label>
                             <input id="last-name-edit-input-field" type="text" class="form-control last-name">
                             <div class="invalid-feedback">Введите фамилию</div>
                         </div>
-                        <div>
+                        <div class="input-block-min-height">
                             <label for="first-name-edit-input-field">Имя</label>
                             <input id="first-name-edit-input-field" type="text" class="form-control first-name">
                             <div class="invalid-feedback">Введите имя</div>
                         </div>
-                        <div>
+                        <div class="input-block-min-height">
                             <label for="phone-number-edit-input-field">Номер телефона</label>
                             <input id="phone-number-edit-input-field" type="text"
                                    class="form-control text-truncate phone-number">
