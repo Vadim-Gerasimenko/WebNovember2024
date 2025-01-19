@@ -22,6 +22,9 @@ $(document).ready(function () {
     const firstNameEditInputField = $(editModalElement).find("#first-name-edit-input-field");
     const phoneNumberEditInputField = $(editModalElement).find("#phone-number-edit-input-field");
 
+    const existingContactModalElement = $("#existing-contact-modal");
+    const existingContactModalDialog = new bootstrap.Modal(existingContactModalElement);
+
     const addingCollapse = new bootstrap.Collapse(addingForm, {
         toggle: false
     });
@@ -74,14 +77,29 @@ $(document).ready(function () {
                     const detailWithFirstName = $(tableRow).find(".first-name");
                     const detailWithPhoneNumber = $(tableRow).find(".phone-number");
 
+                    const detailWithPhoneNumberValue = $(detailWithPhoneNumber).text();
+
                     $(lastNameEditInputField).val($(detailWithLastName).text());
                     $(firstNameEditInputField).val($(detailWithFirstName).text());
-                    $(phoneNumberEditInputField).val($(detailWithPhoneNumber).text());
+                    $(phoneNumberEditInputField).val(detailWithPhoneNumberValue);
 
                     $(editModalElement).find(".save-changes-button").off().click(function () {
                         const updatedContact = addContactDetails(editModalElementInputFields);
 
-                        if (updatedContact === null) {
+                        if (updatedContact === -1) {
+                            return;
+                        }
+
+                        if (updatedContact === 1) {
+                            if ($(phoneNumberEditInputField).val() === detailWithPhoneNumberValue) {
+                                $(detailWithLastName).text($(lastNameEditInputField).val());
+                                $(detailWithFirstName).text($(firstNameEditInputField).val());
+
+                                editModalDialog.hide();
+                                return;
+                            }
+
+                            existingContactModalDialog.show(null);
                             return;
                         }
 
@@ -133,7 +151,12 @@ $(document).ready(function () {
 
         const contact = addContactDetails(addingFormInputFields);
 
-        if (contact == null) {
+        if (contact === -1) {
+            return;
+        }
+
+        if (contact === 1) {
+            existingContactModalDialog.show(null);
             return;
         }
 
@@ -162,7 +185,12 @@ $(document).ready(function () {
         const phoneNumber = getInputFieldValue(inputFields[2]);
 
         if (!isValidFieldsValues) {
-            return null;
+            return -1;
+        }
+
+        if ($(tableRows).filter((_, row) => $(row).find(".phone-number").text() === phoneNumber).length > 0) {
+            $(existingContactModalElement).find(".phone-number").text(phoneNumber);
+            return 1;
         }
 
         return new Contact(lastName, firstName, phoneNumber);
