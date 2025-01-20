@@ -14,11 +14,9 @@ $(document).ready(function () {
     const deleteSelectedButton = $("#delete-selected-button");
 
     const deleteModalElement = $("#contact-delete-modal");
-    const deleteModalDialog = new bootstrap.Modal(deleteModalElement);
+    let deleteModalElementBody = $("");
 
-    const deleteModalElementLastNameLabel = $(deleteModalElement).find(".last-name");
-    const deleteModalElementFirstNameLabel = $(deleteModalElement).find(".first-name");
-    const deleteModalElementPhoneNumberLabel = $(deleteModalElement).find(".phone-number");
+    const deleteModalDialog = new bootstrap.Modal(deleteModalElement);
 
     const editModalElement = $("#contact-edit-modal");
     const editModalDialog = new bootstrap.Modal(editModalElement);
@@ -37,11 +35,29 @@ $(document).ready(function () {
 
     const addingCollapseCloseButton = $("#contact-adding-collapse-close-button");
 
+    deleteModalElement.on("hidden.bs.modal", function () {
+        deleteModalElementBody.remove();
+    });
+
     class Contact {
         constructor(lastName, firstName, phoneNumber) {
             this.lastName = lastName;
             this.firstName = firstName;
             this.phoneNumber = phoneNumber;
+        }
+    }
+
+    function updateCheckedRows(row) {
+        removeSoft(checkedTableRows, row);
+
+        if (checkedTableRows.length === 0) {
+            hide(deleteSelectedButton);
+        }
+    }
+
+    function updateAllSelectionCheckbox() {
+        if (checkedTableRows.length === tableRows.length) {
+            setCheckedProperty(allSelectionCheckbox, true);
         }
     }
 
@@ -61,14 +77,43 @@ $(document).ready(function () {
     }
 
     $(deleteSelectedButton).click(function () {
-        $(checkedTableRows).each((_, row) => {
-            removeSoft(checkedTableRows, row);
-            updateIndexes(tableRows, removeHard(tableRows, row));
-        });
+        deleteModalElementBody = $(`
+            <div>
+                <div>
+                    <span>Количество выбранных контактов:</span>
+                    <span class="fw-semibold">${checkedTableRows.length}</span>
+                    <span>из</span>
+                    <span class="fw-semibold">${tableRows.length}</span>
+                </div>
+                <div>
+                    Вы уверены, что хотите удалить их?
+                </div>
+            </div>
+        `);
 
-        checkContactsExistence();
-        hide(deleteSelectedButton);
+        configureDeleteModalDialog(checkedTableRows);
     });
+
+    function configureDeleteModalDialog(removedRows) {
+        $(deleteModalElement).find(".modal-body").append(deleteModalElementBody);
+        deleteModalDialog.show(null);
+
+        $(deleteModalElement).find(".delete-button").off().click(function () {
+            $(removedRows).each((_, row) => {
+                updateCheckedRows(row);
+                updateIndexes(tableRows, removeHard(tableRows, row));
+            });
+
+            updateAllSelectionCheckbox();
+            checkContactsExistence();
+
+            if (this === deleteSelectedButton) {
+                hide(deleteSelectedButton);
+            }
+
+            deleteModalDialog.hide();
+        });
+    }
 
     $(allSelectionCheckbox).change(function () {
         function changeAllCheckboxes(isChecked) {
@@ -105,16 +150,25 @@ $(document).ready(function () {
     function removeHard(elements, removedElement) {
         const index = removeSoft(elements, removedElement);
         removedElement.remove();
+
         return index;
     }
 
     function removeSoft(elements, removedElement) {
         const index = elements.indexOf(removedElement);
-        elements.splice(index, 1);
+
+        if (index !== -1) {
+            elements.splice(index, 1);
+        }
+
         return index;
     }
 
     function updateIndexes(rows, removedRowIndex) {
+        if (removedRowIndex < 0) {
+            return;
+        }
+
         for (let i = removedRowIndex; i < rows.length; ++i) {
             $(rows[i]).find(".index").text(i + 1);
         }
@@ -133,39 +187,23 @@ $(document).ready(function () {
             $(emptyTableMessage).hide();
         }
 
-        function updateAllSelectionCheckbox() {
-            console.log(checkedTableRows.length + " " + tableRows.length)
-            if (checkedTableRows.length === tableRows.length) {
-                setCheckedProperty(allSelectionCheckbox, true);
-            }
-        }
-
-        function updateCheckedRows(row) {
-            removeSoft(checkedTableRows, row);
-
-            if (checkedTableRows.length === 0) {
-                hide(deleteSelectedButton);
-            }
-        }
-
         const tableRow = $("<tr>")
             .append($("<td>").append($("<input>")
                 .addClass("form-check-input checkbox")
                 .attr("type", "checkbox")
                 .change(function () {
-                        if (this.checked) {
-                            checkedTableRows.push(tableRow);
+                    if (this.checked) {
+                        checkedTableRows.push(tableRow);
 
-                            show(deleteSelectedButton);
-                            updateAllSelectionCheckbox();
+                        show(deleteSelectedButton);
+                        updateAllSelectionCheckbox();
 
-                            return;
-                        }
-
-                        updateCheckedRows(tableRow);
-                        setCheckedProperty(allSelectionCheckbox, false);
+                        return;
                     }
-                )
+
+                    updateCheckedRows(tableRow);
+                    setCheckedProperty(allSelectionCheckbox, false);
+                })
             ))
             .append($("<td>").addClass("index").text(contactIndex + 1))
             .append($("<td>").addClass("last-name").text(contact.lastName))
@@ -227,18 +265,28 @@ $(document).ready(function () {
                 .text("Удалить")
                 .addClass("btn btn-danger btn-sm d-inline-block border-0 ms-2")
                 .click(function () {
-                    deleteModalElementLastNameLabel.text($(tableRow).find(".last-name").text());
-                    deleteModalElementFirstNameLabel.text($(tableRow).find(".first-name").text());
-                    deleteModalElementPhoneNumberLabel.text($(tableRow).find(".phone-number").text());
+                    deleteModalElementBody = $(`
+                        <div>
+                            <p>
+                                Вы уверены, что хотите удалить следующий контакт?
+                            </p>
+                            <div>
+                                <span class="fw-semibold">Данные контакта:</span>
+                                <span class="last-name"></span>
+                                <span class="first-name"></span>
+                            </div>
+                            <div>
+                                <span class="fw-semibold">Номер телефона:</span>
+                                <span class="phone-number"></span>
+                            </div>
+                        </div>
+                    `);
 
-                    $(deleteModalElement).find(".delete-button").off().click(function () {
-                        updateCheckedRows(tableRow);
-                        updateIndexes(tableRows, removeHard(tableRows, tableRow));
-                        updateAllSelectionCheckbox();
+                    $(deleteModalElementBody).find(".last-name").text($(tableRow).find(".last-name").text());
+                    $(deleteModalElementBody).find(".first-name").text($(tableRow).find(".first-name").text());
+                    $(deleteModalElementBody).find(".phone-number").text($(tableRow).find(".phone-number").text());
 
-                        checkContactsExistence();
-                        deleteModalDialog.hide();
-                    });
+                    configureDeleteModalDialog([tableRow]);
                 })
             );
 
