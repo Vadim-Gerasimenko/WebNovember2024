@@ -4,8 +4,13 @@ $(document).ready(function () {
 
     const table = $("#contacts-table");
     const tableRows = [];
+    let visibleTableRows = tableRows.slice();
 
     const emptyTableMessage = $("#empty-contacts-table-message");
+
+    const filter = $("#filter");
+    const filterInputField = $(filter).find("#filter-input-field");
+    const filterCheckbox = $(filter).find("#filter-application-checkbox");
 
     const allSelectionCheckboxHead = $("#all-selection-checkbox-head");
     const allSelectionCheckbox = $("#all-selection-checkbox");
@@ -35,7 +40,69 @@ $(document).ready(function () {
 
     const addingCollapseCloseButton = $("#contact-adding-collapse-close-button");
 
-    deleteModalElement.on("hidden.bs.modal", function () {
+    $(filterInputField).keypress(function (e) {
+        if (e.which === 13 || e.keyCode === 13) {
+            $(filterCheckbox).click();
+            $(filterCheckbox).focus();
+        }
+    });
+
+    $(filterCheckbox).keypress(function (e) {
+        if (e.which === 13 || e.keyCode === 13) {
+            $(filterCheckbox).click();
+        }
+    });
+
+    $(filterCheckbox).change(function () {
+        if (this.checked) {
+            filterInputField.attr("disabled", true);
+            const prompt = filterInputField.val().toLowerCase().trim();
+
+            function isMatchedPrompt(row) {
+                return $(row).find(".last-name").text().toLowerCase().includes(prompt)
+                    || $(row).find(".first-name").text().toLowerCase().includes(prompt)
+                    || $(row).find(".phone-number").text().toLowerCase().includes(prompt);
+            }
+
+            visibleTableRows = tableRows.filter(row => isMatchedPrompt(row));
+
+            visibleTableRows.forEach((row, index) => {
+                $(row).find(".number").text(index + 1);
+            });
+
+            tableRows
+                .filter(row => !isMatchedPrompt(row))
+                .forEach(row => hide(row));
+
+            if (visibleTableRows.length === 0) {
+                $(emptyTableMessage).show();
+                hide(allSelectionCheckboxHead);
+            }
+
+            return;
+        }
+
+        $(emptyTableMessage).hide();
+        show(allSelectionCheckboxHead);
+
+        tableRows.forEach((row, index) => {
+            $(row).find(".number").text(index + 1);
+            visibleTableRows.push(row);
+
+            show(row);
+        });
+
+        filterInputField.attr("disabled", false);
+    });
+
+    function updateFilter() {
+        if ($(filterCheckbox).prop("checked")) {
+            filterCheckbox.change();
+            filterCheckbox.change();
+        }
+    }
+
+    $(deleteModalElement).on("hidden.bs.modal", function () {
         deleteModalElementBody.remove();
     });
 
@@ -64,6 +131,8 @@ $(document).ready(function () {
     function checkContactsExistence() {
         if (tableRows.length === 0) {
             hide(allSelectionCheckboxHead);
+            hide(filter);
+
             $(emptyTableMessage).show();
         }
     }
@@ -114,6 +183,12 @@ $(document).ready(function () {
             deleteModalDialog.hide();
         });
     }
+
+    $(allSelectionCheckbox).keypress(function (e) {
+        if (e.which === 13 || e.keyCode === 13) {
+            $(allSelectionCheckbox).click();
+        }
+    });
 
     $(allSelectionCheckbox).change(function () {
         function changeAllCheckboxes(isChecked) {
@@ -170,7 +245,7 @@ $(document).ready(function () {
         }
 
         for (let i = removedRowIndex; i < rows.length; ++i) {
-            $(rows[i]).find(".index").text(i + 1);
+            $(rows[i]).find(".number").text(i + 1);
         }
     }
 
@@ -183,9 +258,13 @@ $(document).ready(function () {
 
         if (contactIndex === 0) {
             setCheckedProperty(allSelectionCheckbox, false);
-            show(allSelectionCheckboxHead);
+
             $(emptyTableMessage).hide();
+
+            show(allSelectionCheckboxHead);
+            show(filter);
         }
+
 
         const tableRow = $("<tr>")
             .append($("<td>").append($("<input>")
@@ -204,8 +283,13 @@ $(document).ready(function () {
                     updateCheckedRows(tableRow);
                     setCheckedProperty(allSelectionCheckbox, false);
                 })
+                .keypress(function (e) {
+                    if (e.which === 13 || e.keyCode === 13) {
+                        $(this).click();
+                    }
+                })
             ))
-            .append($("<td>").addClass("index").text(contactIndex + 1))
+            .append($("<td>").addClass("number").text(contactIndex + 1))
             .append($("<td>").addClass("last-name").text(contact.lastName))
             .append($("<td>").addClass("first-name").text(contact.firstName))
             .append($("<td>").addClass("phone-number").text(contact.phoneNumber))
@@ -215,7 +299,7 @@ $(document).ready(function () {
                 .attr("data-bs-toggle", "modal")
                 .attr("data-bs-target", "#contact-edit-modal")
                 .text("Изменить")
-                .addClass("btn btn-primary btn-sm d-inline-block border-0 ms-2")
+                .addClass("btn btn-primary btn-sm d-inline-block border-0 ms-3 mt-1")
                 .click(function () {
                     removeInvalidClasses(editModalElementInputFields);
 
@@ -236,23 +320,30 @@ $(document).ready(function () {
                             return;
                         }
 
+                        let lastName;
+                        let firstName;
+                        let phoneNumber;
+
                         if (updatedContact === 1) {
-                            if ($(phoneNumberEditInputField).val() === detailWithPhoneNumberValue) {
-                                $(detailWithLastName).text($(lastNameEditInputField).val());
-                                $(detailWithFirstName).text($(firstNameEditInputField).val());
-
-                                editModalDialog.hide();
+                            if ($(phoneNumberEditInputField).val().trim() !== detailWithPhoneNumberValue) {
+                                existingContactModalDialog.show(null);
                                 return;
+                            } else {
+                                lastName = $(lastNameEditInputField).val();
+                                firstName = $(firstNameEditInputField).val();
+                                phoneNumber = detailWithPhoneNumberValue;
                             }
-
-                            existingContactModalDialog.show(null);
-                            return;
+                        } else {
+                            lastName = updatedContact.lastName;
+                            firstName = updatedContact.firstName;
+                            phoneNumber = updatedContact.phoneNumber;
                         }
 
-                        $(detailWithLastName).text(updatedContact.lastName);
-                        $(detailWithFirstName).text(updatedContact.firstName);
-                        $(detailWithPhoneNumber).text(updatedContact.phoneNumber);
+                        $(detailWithLastName).text(lastName);
+                        $(detailWithFirstName).text(firstName);
+                        $(detailWithPhoneNumber).text(phoneNumber);
 
+                        updateFilter();
                         editModalDialog.hide();
                     });
                 })
@@ -263,7 +354,7 @@ $(document).ready(function () {
                 .attr("data-bs-toggle", "modal")
                 .attr("data-bs-target", "#contact-delete-modal")
                 .text("Удалить")
-                .addClass("btn btn-danger btn-sm d-inline-block border-0 ms-2")
+                .addClass("btn btn-danger btn-sm d-inline-block border-0 ms-3 mt-1")
                 .click(function () {
                     deleteModalElementBody = $(`
                         <div>
@@ -294,9 +385,10 @@ $(document).ready(function () {
         $(table).find("tbody").append(tableRow);
 
         tableRows.push(tableRow);
+        updateFilter();
     }
 
-    addingForm.submit(function (e) {
+    $(addingForm).submit(function (e) {
         e.preventDefault();
 
         const contact = addContactDetails(addingFormInputFields);
