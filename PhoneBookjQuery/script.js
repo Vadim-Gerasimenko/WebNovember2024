@@ -4,7 +4,7 @@ $(document).ready(function () {
 
     const table = $("#contacts-table");
     const tableRows = [];
-    let visibleTableRows = tableRows.slice();
+    let visibleTableRows = [];
 
     const emptyTableMessage = $("#empty-contacts-table-message");
 
@@ -53,6 +53,10 @@ $(document).ready(function () {
         }
     });
 
+    function getVisibleRows(rows) {
+        return $(rows).filter((_, row) => !$(row).hasClass("d-none"));
+    }
+
     $(filterCheckbox).change(function () {
         if (this.checked) {
             filterInputField.attr("disabled", true);
@@ -74,9 +78,13 @@ $(document).ready(function () {
                 .filter(row => !isMatchedPrompt(row))
                 .forEach(row => hide(row));
 
+            updateAllSelectionCheckbox();
+
             if (visibleTableRows.length === 0) {
                 $(emptyTableMessage).show();
+
                 hide(allSelectionCheckboxHead);
+                hide(deleteSelectedButton);
             }
 
             return;
@@ -85,13 +93,15 @@ $(document).ready(function () {
         $(emptyTableMessage).hide();
         show(allSelectionCheckboxHead);
 
+        visibleTableRows = [];
+
         tableRows.forEach((row, index) => {
             $(row).find(".number").text(index + 1);
             visibleTableRows.push(row);
-
             show(row);
         });
 
+        updateSelectiveDeletionArea();
         filterInputField.attr("disabled", false);
     });
 
@@ -114,27 +124,34 @@ $(document).ready(function () {
         }
     }
 
-    function updateCheckedRows(row) {
+    function removeCheckedRow(row) {
         removeSoft(checkedTableRows, row);
+        updateDeleteSelectedButton();
+    }
 
-        if (checkedTableRows.length === 0) {
+    function updateDeleteSelectedButton() {
+        if (getVisibleRows(checkedTableRows).length === 0) {
             hide(deleteSelectedButton);
+            return;
         }
+
+        show(deleteSelectedButton);
     }
 
     function updateAllSelectionCheckbox() {
-        if (checkedTableRows.length === tableRows.length) {
+        const visibleCheckedRowsCount = getVisibleRows(checkedTableRows).length;
+
+        if (visibleCheckedRowsCount !== 0 && visibleCheckedRowsCount === visibleTableRows.length) {
             setCheckedProperty(allSelectionCheckbox, true);
+            return;
         }
+
+        return setCheckedProperty(allSelectionCheckbox, false);
     }
 
-    function checkContactsExistence() {
-        if (tableRows.length === 0) {
-            hide(allSelectionCheckboxHead);
-            hide(filter);
-
-            $(emptyTableMessage).show();
-        }
+    function updateSelectiveDeletionArea() {
+        updateAllSelectionCheckbox();
+        updateDeleteSelectedButton();
     }
 
     function hide(element) {
@@ -146,13 +163,15 @@ $(document).ready(function () {
     }
 
     $(deleteSelectedButton).click(function () {
+        const visibleCheckedRows = getVisibleRows(checkedTableRows);
+
         deleteModalElementBody = $(`
             <div>
                 <div>
                     <span>Количество выбранных контактов:</span>
-                    <span class="fw-semibold">${checkedTableRows.length}</span>
+                    <span class="fw-semibold">${visibleCheckedRows.length}</span>
                     <span>из</span>
-                    <span class="fw-semibold">${tableRows.length}</span>
+                    <span class="fw-semibold">${visibleTableRows.length}</span>
                 </div>
                 <div>
                     Вы уверены, что хотите удалить их?
@@ -160,7 +179,7 @@ $(document).ready(function () {
             </div>
         `);
 
-        configureDeleteModalDialog(checkedTableRows);
+        configureDeleteModalDialog(visibleCheckedRows);
     });
 
     function configureDeleteModalDialog(removedRows) {
@@ -169,15 +188,21 @@ $(document).ready(function () {
 
         $(deleteModalElement).find(".delete-button").off().click(function () {
             $(removedRows).each((_, row) => {
-                updateCheckedRows(row);
+                removeCheckedRow(row);
+                removeSoft(visibleTableRows, row);
+
                 updateIndexes(tableRows, removeHard(tableRows, row));
+                updateFilter();
             });
 
-            updateAllSelectionCheckbox();
-            checkContactsExistence();
+            if (tableRows.length !== 0) {
+                updateSelectiveDeletionArea();
+            } else {
+                hide(allSelectionCheckboxHead);
+                hide(filter);
 
-            if (this === deleteSelectedButton) {
-                hide(deleteSelectedButton);
+                setCheckedProperty(allSelectionCheckbox, false);
+                $(emptyTableMessage).show();
             }
 
             deleteModalDialog.hide();
@@ -191,23 +216,25 @@ $(document).ready(function () {
     });
 
     $(allSelectionCheckbox).change(function () {
-        function changeAllCheckboxes(isChecked) {
-            $(tableRows).each((_, row) => setCheckedProperty($(row).find(".checkbox"), isChecked));
+        function changeVisibleCheckboxes(isChecked) {
+            $(visibleTableRows).each((_, row) => setCheckedProperty($(row).find(".checkbox"), isChecked));
         }
 
         if (this.checked) {
-            changeAllCheckboxes(true);
+            visibleTableRows
+                .filter(row => !checkedTableRows.includes(row))
+                .forEach(row => checkedTableRows.push(row));
 
-            checkedTableRows = tableRows.slice();
-            show(deleteSelectedButton);
+            changeVisibleCheckboxes(true);
+            updateDeleteSelectedButton();
 
             return;
         }
 
-        changeAllCheckboxes(false);
+        checkedTableRows = checkedTableRows.filter(row => $(row).hasClass("d-none"));
 
-        checkedTableRows = [];
-        hide(deleteSelectedButton);
+        changeVisibleCheckboxes(false);
+        updateDeleteSelectedButton();
     });
 
     $(addingCollapseCloseButton).click(function () {
@@ -258,13 +285,11 @@ $(document).ready(function () {
 
         if (contactIndex === 0) {
             setCheckedProperty(allSelectionCheckbox, false);
-
             $(emptyTableMessage).hide();
 
             show(allSelectionCheckboxHead);
             show(filter);
         }
-
 
         const tableRow = $("<tr>")
             .append($("<td>").append($("<input>")
@@ -273,14 +298,12 @@ $(document).ready(function () {
                 .change(function () {
                     if (this.checked) {
                         checkedTableRows.push(tableRow);
-
-                        show(deleteSelectedButton);
-                        updateAllSelectionCheckbox();
+                        updateSelectiveDeletionArea();
 
                         return;
                     }
 
-                    updateCheckedRows(tableRow);
+                    removeCheckedRow(tableRow);
                     setCheckedProperty(allSelectionCheckbox, false);
                 })
                 .keypress(function (e) {
@@ -328,11 +351,11 @@ $(document).ready(function () {
                             if ($(phoneNumberEditInputField).val().trim() !== detailWithPhoneNumberValue) {
                                 existingContactModalDialog.show(null);
                                 return;
-                            } else {
-                                lastName = $(lastNameEditInputField).val();
-                                firstName = $(firstNameEditInputField).val();
-                                phoneNumber = detailWithPhoneNumberValue;
                             }
+
+                            lastName = $(lastNameEditInputField).val();
+                            firstName = $(firstNameEditInputField).val();
+                            phoneNumber = detailWithPhoneNumberValue;
                         } else {
                             lastName = updatedContact.lastName;
                             firstName = updatedContact.firstName;
@@ -381,11 +404,13 @@ $(document).ready(function () {
                 })
             );
 
-        setCheckedProperty(allSelectionCheckbox, false);
         $(table).find("tbody").append(tableRow);
 
         tableRows.push(tableRow);
+        visibleTableRows.push(tableRow);
+
         updateFilter();
+        updateAllSelectionCheckbox();
     }
 
     $(addingForm).submit(function (e) {
