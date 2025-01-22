@@ -1,35 +1,42 @@
+"use strict";
+
 document.addEventListener("DOMContentLoaded", function () {
     const temperatureConversionForm = document.getElementById("temperature-conversion-form");
-    const temperatureInputField = document.getElementById("temperature-input-field");
-    const convertedTemperature = document.getElementById("converted-temperature");
+    const celsiusTemperatureInputField = document.getElementById("celsius-temperature-input-field");
+    const convertedTemperatureBlock = document.getElementById("converted-temperature");
+
+    const convertedToCelsiusTemperatureLabel = convertedTemperatureBlock.querySelector(".celsius-temperature");
+    const convertedToKelvinTemperatureLabel = convertedTemperatureBlock.querySelector(".kelvin-temperature");
+    const convertedToFahrenheitTemperatureLabel = convertedTemperatureBlock.querySelector(".fahrenheit-temperature");
 
     temperatureConversionForm.addEventListener("submit", function (e) {
         e.preventDefault();
-        temperatureInputField.classList.remove("empty-field");
-        temperatureInputField.classList.remove("incorrect-value");
+        celsiusTemperatureInputField.classList.remove("empty-field", "incorrect-value");
 
-        const inputTemperature = temperatureInputField.value.trim();
+        const inputCelsiusTemperature = celsiusTemperatureInputField.value.trim();
 
-        if (inputTemperature.length === 0) {
-            temperatureInputField.classList.add("empty-field");
+        if (inputCelsiusTemperature.length === 0) {
+            celsiusTemperatureInputField.classList.add("empty-field");
             return;
         }
 
-        const celsiusTemperature = Number(inputTemperature);
+        const celsiusTemperature = Number(inputCelsiusTemperature);
 
-        if (isNaN(celsiusTemperature) === true) {
-            temperatureInputField.classList.add("incorrect-value");
+        if (isNaN(celsiusTemperature)) {
+            celsiusTemperatureInputField.classList.add("incorrect-value");
             return;
         }
 
-        const convertCelsiusToKelvin = temperature => temperature + 273.15;
-        const convertCelsiusToFahrenheit = temperature => temperature * 1.8 + 32;
+        function convertCelsiusToKelvin(celsiusTemperature) {
+            return celsiusTemperature + 273.15;
+        }
 
-        convertedTemperature.querySelector(".celsius-temperature").textContent =
-            "Температура в Цельсиях: " + celsiusTemperature + " °C";
-        convertedTemperature.querySelector(".kelvin-temperature").textContent =
-            "Температура в Кельвинах: " + convertCelsiusToKelvin(celsiusTemperature) + " °K";
-        convertedTemperature.querySelector(".fahrenheit-temperature").textContent =
-            "Температура в Фаренгейтах: " + convertCelsiusToFahrenheit(celsiusTemperature) + " °F";
+        function convertCelsiusToFahrenheit(celsiusTemperature) {
+            return celsiusTemperature * 1.8 + 32;
+        }
+
+        convertedToCelsiusTemperatureLabel.textContent = "Температура в Цельсиях: " + celsiusTemperature + " °C";
+        convertedToKelvinTemperatureLabel.textContent = "Температура в Кельвинах: " + convertCelsiusToKelvin(celsiusTemperature) + " °K";
+        convertedToFahrenheitTemperatureLabel.textContent = "Температура в Фаренгейтах: " + convertCelsiusToFahrenheit(celsiusTemperature) + " °F";
     });
 });
