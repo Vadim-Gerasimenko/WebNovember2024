@@ -67,9 +67,9 @@
     console.log(countries);
 
     function getCountriesWithMaxCitiesCount(countries) {
-        return countries.filter(country => country.cities.length === Math.max(
-            ...countries.map(country => country.cities.length))
-        );
+        const maxCitiesCount = Math.max(...countries.map(country => country.cities.length));
+
+        return countries.filter(country => country.cities.length === maxCitiesCount);
     }
 
     console.log("Countries with maximum number of cities:");
@@ -78,7 +78,7 @@
     function getCountriesPopulationInfo(countries) {
         return Object.fromEntries(countries.map(country => [
             country.name,
-            country.cities.reduce((result, city) => result + city.population, 0)
+            country.cities.reduce((totalCountryPopulation, city) => totalCountryPopulation + city.population, 0)
         ]));
     }
 
