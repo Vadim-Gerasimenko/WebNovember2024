@@ -1,10 +1,8 @@
-* {
-    box-sizing: border-box;
-}
-
 .task {
-    font: 14px "American Typewriter";
-    margin-left: 1em;
+    font-family: "American Typewriter", serif;
+    font-size: 14px;
+    max-width: 420px;
+    margin: 0 auto;
 }
 
 .title {
@@ -25,8 +23,22 @@
     vertical-align: top;
 }
 
-.new-todo-text-field, .edit-todo-text-area {
+.new-todo-text-field, .edit-todo-input-field {
     min-width: 250px;
+}
+
+.todo-content {
+    display: flex;
+}
+
+.todo-text {
+    max-width: 200px;
+    word-wrap: break-word;
+}
+
+.todo-buttons {
+    display: inline-block;
+    margin-left: auto;
 }
 
 .base-button:hover {
@@ -53,10 +65,6 @@
 
 .invalid {
     border-color: #f00;
-}
-
-.todo-text {
-    display: inline-block;
 }
 
 .new-todo-label {
