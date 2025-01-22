@@ -1,95 +1,58 @@
 (function () {
     "use strict";
 
-    (function () {
-        const numbers = [3, 4, 7, 8, 2, 2, 6, 11.1, 5, 14];
-        console.log("Initial array: " + numbers);
+    const numbers = [3, 4, 7, 8, 2, 2, 6, 11.1, 5, 14];
+    console.log("Initial array: " + numbers);
 
-        (function () {
-            function sortNumbersByDescending(numbers) {
-                function validateElementsTypes(array, correctType) {
-                    if (numbers.some(number => (typeof number) !== correctType)) {
-                        throw `At least one of the array elements is not a ${correctType}.`;
-                    }
-                }
+    function sortNumbersByDescending(numbers) {
+        numbers.sort((number1, number2) => number2 - number1);
+    }
 
-                const numbersElementsType = "number";
-                validateElementsTypes(numbers, numbersElementsType);
+    sortNumbersByDescending(numbers);
+    console.log("Sorted array in descending order: " + numbers);
 
-                numbers.sort((number1, number2) => number2 - number1);
-            }
+    function getFirstElements(array, elementsCount) {
+        return array.slice(0, elementsCount);
+    }
 
-            try {
-                sortNumbersByDescending(numbers);
-                console.log("Sorted array in descending order: " + numbers);
-            } catch (e) {
-                console.log("Failed to sort array of numbers in descending order: " + e);
-            }
-        })();
+    function getLastElements(array, elementsCount) {
+        return array.slice(-elementsCount);
+    }
 
-        (function () {
-            function validateSize(array, minElementsCount) {
-                if (array.length < minElementsCount) {
-                    throw `The array contains less than ${minElementsCount} elements. Current array size: ${array.length}.`;
-                }
-            }
+    function printSubarray(numbers, elementsCount, elementsGettingFunction, position) {
+        console.log(`Subarray of the ${position} ${elementsCount} elements: ${elementsGettingFunction(numbers, elementsCount)}`);
+    }
 
-            function getFirstElements(array, elementsCount) {
-                validateSize(array, elementsCount);
-                return array.slice(0, elementsCount);
-            }
+    let elementsCount = 5;
 
-            function getLastElements(array, elementsCount) {
-                validateSize(array, elementsCount);
-                return array.slice(array.length - elementsCount);
-            }
+    printSubarray(numbers, elementsCount, getFirstElements, "first");
+    printSubarray(numbers, elementsCount, getLastElements, "last");
 
-            function printSubarray(numbers, elementsCount, elementsGettingFunction, position) {
-                try {
-                    console.log(`Subarray of the ${position} ${elementsCount} elements: ${elementsGettingFunction(numbers, elementsCount)}`);
-                } catch (e) {
-                    console.log(`Failed to get subarray of the ${position} ${elementsCount} elements: ${e}`);
-                }
-            }
+    function getEvenNumbersSum(numbers) {
+        return numbers
+            .filter(number => number % 2 === 0)
+            .reduce((evenNumbersSum, number) => evenNumbersSum + number, 0);
+    }
 
-            const elementsCount = 5;
+    console.log("Sum of even numbers: " + getEvenNumbersSum(numbers));
 
-            printSubarray(numbers, elementsCount, getFirstElements, "first");
-            printSubarray(numbers, elementsCount, getLastElements, "last");
-        })();
+    function createRange(startNumber, elementsCount) {
+        return Array(elementsCount)
+            .fill(0, 0, elementsCount + 1)
+            .map((number, index) => index + startNumber);
+    }
 
-        (function () {
-            function getEvenNumbersSum(numbers) {
-                const numbersType = "number";
-                return numbers.filter(number => (typeof number) === numbersType && number % 2 === 0)
-                    .reduce((result, number) => result + number, 0);
-            }
+    const startNumber = 1;
+    elementsCount = 100;
 
-            console.log("Sum of even numbers: " + getEvenNumbersSum(numbers));
-        })();
-    })();
+    const range = createRange(startNumber, elementsCount);
+    console.log(`Array of range from ${startNumber} to ${startNumber + elementsCount - 1}: ${range}`);
 
-    (function () {
-        function createRange(startValue, elementsCount) {
-            return Array(elementsCount)
-                .fill(0, 0, elementsCount + 1)
-                .map((number, index) => index + startValue);
-        }
+    function getEvenNumbersSquaresArray(numbers) {
+        return numbers
+            .filter(number => number % 2 === 0)
+            .map(number => number * number);
+    }
 
-        const startValue = 1;
-        const elementsCount = 100;
-
-        const range = createRange(startValue, elementsCount);
-        console.log(`Array of range from ${startValue} to ${startValue + elementsCount - 1}: ${range}`);
-
-        (function () {
-            function getEvenNumbersSquaresArray(numbers) {
-                const numbersType = "number";
-                return numbers.filter(number => (typeof number) === numbersType && number % 2 === 0)
-                    .map(number => number * number);
-            }
-
-            console.log("Even numbers squares array: " + getEvenNumbersSquaresArray(range));
-        })();
-    })();
+    console.log("Even numbers squares array: " + getEvenNumbersSquaresArray(range));
 })();
