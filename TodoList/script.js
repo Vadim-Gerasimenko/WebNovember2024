@@ -1,3 +1,5 @@
+"use strict";
+
 document.addEventListener("DOMContentLoaded", function () {
     const todoList = document.getElementById("todo-list");
     const newTodoForm = document.getElementById("new-todo-form");
@@ -18,10 +20,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function setViewMode() {
             newTodoItem.innerHTML = `
-                <div>
+                <div class="todo-content">
                     <div class="todo-text"></div>
-                    <button class="base-button edit-button" type="button">Редактировать</button>
-                    <button class="base-button delete-button" type="button">Удалить </button>
+                    <div class="todo-buttons">
+                        <button class="base-button edit-button" type="button">Редактировать</button>
+                        <button class="base-button delete-button" type="button">Удалить </button>
+                    </div>
                 </div>
             `;
 
@@ -30,14 +34,18 @@ document.addEventListener("DOMContentLoaded", function () {
             newTodoItem.querySelector(".edit-button").addEventListener("click", function () {
                 newTodoItem.innerHTML = `
                     <div>
-                        <textarea class="base-text-field edit-todo-text-area"></textarea>
-                        <button class="base-button save-button" type="button">Сохранить</button>
-                        <button class="base-button cancel-button" type="button">Отмена</button>
+                        <label for="edit-todo-input-field"></label>
+                        <input id="edit-todo-input-field" type="text" class="base-text-field edit-todo-input-field">
+                        
+                        <div class="todo-buttons">
+                            <button class="base-button save-button" type="button">Сохранить</button>
+                            <button class="base-button cancel-button" type="button">Отмена</button>                     
+                        </div>
                         <div class="error-message">Необходимо задать значение</div>
                     </div>
                 `;
 
-                const editTodoTextField = newTodoItem.querySelector(".edit-todo-text-area");
+                const editTodoTextField = newTodoItem.querySelector(".edit-todo-input-field");
                 editTodoTextField.value = newTodoText;
 
                 editTodoTextField.addEventListener("keypress", function (e) {
