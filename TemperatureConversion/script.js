@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const celsiusTemperatureInputField = document.getElementById("celsius-temperature-input-field");
     const convertedTemperatureBlock = document.getElementById("converted-temperature");
 
-    const convertedToCelsiusTemperatureLabel = convertedTemperatureBlock.querySelector(".celsius-temperature");
-    const convertedToKelvinTemperatureLabel = convertedTemperatureBlock.querySelector(".kelvin-temperature");
-    const convertedToFahrenheitTemperatureLabel = convertedTemperatureBlock.querySelector(".fahrenheit-temperature");
+    const convertedTemperatureInCelsiusLabel = convertedTemperatureBlock.querySelector(".celsius-temperature");
+    const convertedTemperatureInKelvinLabel = convertedTemperatureBlock.querySelector(".kelvin-temperature");
+    const convertedTemperatureInFahrenheitLabel = convertedTemperatureBlock.querySelector(".fahrenheit-temperature");
 
     temperatureConversionForm.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return celsiusTemperature * 1.8 + 32;
         }
 
-        convertedToCelsiusTemperatureLabel.textContent = "Температура в Цельсиях: " + celsiusTemperature + " °C";
-        convertedToKelvinTemperatureLabel.textContent = "Температура в Кельвинах: " + convertCelsiusToKelvin(celsiusTemperature) + " °K";
-        convertedToFahrenheitTemperatureLabel.textContent = "Температура в Фаренгейтах: " + convertCelsiusToFahrenheit(celsiusTemperature) + " °F";
+        convertedTemperatureInCelsiusLabel.textContent = "Температура в Цельсиях: " + celsiusTemperature + " °C";
+        convertedTemperatureInKelvinLabel.textContent = "Температура в Кельвинах: " + convertCelsiusToKelvin(celsiusTemperature) + " °K";
+        convertedTemperatureInFahrenheitLabel.textContent = "Температура в Фаренгейтах: " + convertCelsiusToFahrenheit(celsiusTemperature) + " °F";
     });
 });
