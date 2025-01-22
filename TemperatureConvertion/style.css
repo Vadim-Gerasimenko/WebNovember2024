@@ -1,9 +1,5 @@
-* {
-    box-sizing: border-box;
-}
-
 .temperature-converter {
-    font: 14px "American Typewriter";
+    font: 14px "American Typewriter", serif;
     margin-left: 1em;
 }
 
@@ -52,7 +48,7 @@
     border-color: #f00;
 }
 
-.empty-field ~ #empty-field-error-message, .incorrect-value ~ #incorrect-value-error-message {
+.empty-field ~ .empty-field-error-message, .incorrect-value ~ .incorrect-value-error-message {
     display: block;
 }
 
