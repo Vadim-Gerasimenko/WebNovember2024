@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TODO List Vue</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" defer></script>
+    <script src="node_modules/vue/dist/vue.global.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+<div id="app" class="container task">
+    <div class="row justify-content-center">
+        <div class="col-xl-6">
+            <h1 class="title">TODO List</h1>
+
+            <form class="row mb-3 new-todo-form" id="new-todo-form">
+                <label class="new-todo-label form-label" for="new-todo-text-field">Введите текст заметки</label>
+
+                <div class="col-6">
+                    <input v-model.trim="newTodoItem" :class="{'is-invalid': isNewTodoItemTextInvalid}"
+                           class="form-control base-text-field new-todo-text-field"
+                           id="new-todo-text-field"
+                           type="text">
+                    <div class="invalid-feedback error-message">Необходимо задать значение</div>
+                </div>
+
+                <div class="col-1">
+                    <button @submit.prevent="addTodoItem" class="btn btn-primary base-button add-button" type="submit">
+                        Добавить
+                    </button>
+                </div>
+            </form>
+
+            <ul v-cloak class="todo-list list-unstyled" id="todo-list">
+                <li v-for="(item, index) in items" :key="item.id">
+                    <div class="todo-text"></div>
+                    <div class="todo-buttons">
+                        <button class="btn btn-primary btn-sm base-button edit-button" type="button">
+                            Редактировать
+                        </button>
+                        <button @click="deleteTodoItem(index)" class="btn btn-danger btn-sm base-button delete-button"
+                                type="button">
+                            Удалить
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
