@@ -1,3 +1,7 @@
 [v-cloak] {
     display: none;
 }
+
+.list-item-text {
+    word-wrap: break-word;
+}
