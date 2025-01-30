@@ -21,15 +21,39 @@ Vue.createApp({
 
             this.items.push({
                 id: this.newTodoItemId,
-                text: newTodoItemText
+                text: newTodoItemText,
+                isEditing: false,
+                editingText: newTodoItemText,
+                isEditingTextInvalid: false
             });
 
-            ++this.newTodoItemId;
+            this.newTodoItemId++;
             this.newTodoItemText = "";
         },
 
         deleteTodoItem(itemIndex) {
-            this.items = this.items.splice(itemIndex, 1);
+            this.items.splice(itemIndex, 1);
+        },
+
+        editTodoItem(itemIndex) {
+            const item = this.items[itemIndex];
+            item.editingText = item.text;
+            item.isEditing = true;
+        },
+
+        saveTodoItem(itemIndex) {
+            const item = this.items[itemIndex];
+
+            item.isEditingTextInvalid = false;
+
+            const editingText = item.editingText;
+
+            if (editingText.length === 0) {
+                item.isEditingTextInvalid = true;
+                return;
+            }
+            item.text = editingText;
+            item.isEditing = false;
         }
     }
-}).mount("app");
+}).mount("#app");
