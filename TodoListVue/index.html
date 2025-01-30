@@ -11,41 +11,68 @@
     <script src="script.js" defer></script>
 </head>
 <body>
-<div id="app" class="container task">
+<div id="app" class="container">
     <div class="row justify-content-center">
-        <div class="col-xl-6">
-            <h1 class="title">TODO List</h1>
+        <div class="col-xl-6 ms-3 mt-3">
+            <h1>TODO List</h1>
 
-            <form class="row mb-3 new-todo-form" id="new-todo-form">
-                <label class="new-todo-label form-label" for="new-todo-text-field">Введите текст заметки</label>
+            <form @submit.prevent="addTodoItem" class="row mb-3">
+                <label class="form-label" for="new-todo-text-field">Введите текст заметки</label>
 
-                <div class="col-6">
-                    <input v-model.trim="newTodoItem" :class="{'is-invalid': isNewTodoItemTextInvalid}"
-                           class="form-control base-text-field new-todo-text-field"
-                           id="new-todo-text-field"
-                           type="text">
-                    <div class="invalid-feedback error-message">Необходимо задать значение</div>
+                <div class="col-9 col-xl-10">
+                    <input id="new-todo-text-field" v-model.trim="newTodoItemText"
+                           :class="{'is-invalid': isNewTodoItemTextInvalid}"
+                           class="form-control" type="text">
+                    <div class="invalid-feedback">Необходимо задать значение</div>
                 </div>
 
                 <div class="col-1">
-                    <button @submit.prevent="addTodoItem" class="btn btn-primary base-button add-button" type="submit">
+                    <button class="btn btn-primary" type="submit">
                         Добавить
                     </button>
                 </div>
             </form>
 
-            <ul v-cloak class="todo-list list-unstyled" id="todo-list">
-                <li v-for="(item, index) in items" :key="item.id">
-                    <div class="todo-text"></div>
-                    <div class="todo-buttons">
-                        <button class="btn btn-primary btn-sm base-button edit-button" type="button">
-                            Редактировать
-                        </button>
-                        <button @click="deleteTodoItem(index)" class="btn btn-danger btn-sm base-button delete-button"
-                                type="button">
-                            Удалить
-                        </button>
-                    </div>
+            <ul v-cloak class="list-unstyled">
+                <li v-for="(item, index) in items" :key="item.id" class="mb-2">
+                    <template v-if="item.isEditing">
+                        <form @submit.prevent="saveTodoItem(index)" class="row">
+                            <div class="col-8 me-2">
+                                <input v-model.trim="item.editingText"
+                                       :class="{'is-invalid': item.isEditingTextInvalid}"
+                                       class="form-control form-control-sm"
+                                       type="text">
+                                <div class="invalid-feedback">Необходимо задать значение</div>
+                            </div>
+                            <div class="col-auto ms-auto">
+                                <button class="btn btn-outline-primary btn-sm border-0 me-1" type="submit">
+                                    Сохранить
+                                </button>
+                                <button @click="item.isEditing = false"
+                                        class="btn btn-outline-danger btn-sm border-0"
+                                        type="button">
+                                    Отмена
+                                </button>
+                            </div>
+                        </form>
+                    </template>
+                    <template v-else>
+                        <div class="row">
+                            <div v-text="item.text" class="col-8 list-item-text"></div>
+                            <div class="col-auto ms-auto">
+                                <button @click="editTodoItem(index)"
+                                        class="btn btn-outline-primary btn-sm border-0 me-1"
+                                        type="button">
+                                    Редактировать
+                                </button>
+                                <button @click="deleteTodoItem(index)"
+                                        class="btn btn-outline-danger btn-sm border-0"
+                                        type="button">
+                                    Удалить
+                                </button>
+                            </div>
+                        </div>
+                    </template>
                 </li>
             </ul>
         </div>
