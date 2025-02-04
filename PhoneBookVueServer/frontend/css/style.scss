@@ -1,5 +1,7 @@
+$none: none;
+
 [v-cloak] {
-    display: none;
+    display: $none;
 }
 
 .header-detail {
