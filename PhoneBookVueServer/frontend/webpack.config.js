@@ -1,9 +1,11 @@
 const path = require("path");
-const {CleanWebpackPlugin} = require("clean-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const {VueLoaderPlugin} = require("vue-loader");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
+const {VueLoaderPlugin} = require("vue-loader");
+
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
     entry: "./js/script.js",
