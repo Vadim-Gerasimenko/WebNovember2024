@@ -23,7 +23,7 @@
         console.log(`Subarray of the ${position} ${elementsCount} elements: ${elementsGettingFunction(numbers, elementsCount)}`);
     }
 
-    let elementsCount = 5;
+    const elementsCount = 5;
 
     printSubarray(numbers, elementsCount, getFirstElements, "first");
     printSubarray(numbers, elementsCount, getLastElements, "last");
@@ -36,17 +36,17 @@
 
     console.log("Sum of even numbers: " + getEvenNumbersSum(numbers));
 
-    function createRange(startNumber, elementsCount) {
-        return Array(elementsCount)
-            .fill(0, 0, elementsCount + 1)
+    function createRange(startNumber, rangeLength) {
+        return Array(rangeLength)
+            .fill(0, 0, rangeLength + 1)
             .map((number, index) => index + startNumber);
     }
 
     const startNumber = 1;
-    elementsCount = 100;
+    const rangeLength = 100;
 
-    const range = createRange(startNumber, elementsCount);
-    console.log(`Array of range from ${startNumber} to ${startNumber + elementsCount - 1}: ${range}`);
+    const range = createRange(startNumber, rangeLength);
+    console.log(`Array of range from ${startNumber} to ${startNumber + rangeLength - 1}: ${range}`);
 
     function getEvenNumbersSquaresArray(numbers) {
         return numbers
