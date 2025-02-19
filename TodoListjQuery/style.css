@@ -1,0 +1,72 @@
+.task {
+    font: 14px "American Typewriter", serif;
+    max-width: 420px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.base-button, .base-text-field {
+    border: 1px solid #000;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 1px 0.5em;
+}
+
+.new-todo-form > * {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.new-todo-text-field, .edit-todo-input-field {
+    min-width: 250px;
+}
+
+.todo-content {
+    display: flex;
+}
+
+.todo-text {
+    max-width: 200px;
+    word-wrap: break-word;
+}
+
+.todo-buttons {
+    display: inline-block;
+    margin-left: auto;
+}
+
+.base-button:hover {
+    background-color: #efefef;
+}
+
+.base-button:active {
+    background-color: #dcdcdc;
+}
+
+.invalid ~ .error-message, .new-todo-form .label {
+    display: block;
+}
+
+.todo-list > li {
+    margin-top: 1em;
+}
+
+.error-message {
+    color: #f00;
+    display: none;
+    margin-top: 0.5em;
+}
+
+.invalid {
+    border-color: #f00;
+}
+
+.new-todo-label {
+    display: block;
+    margin-bottom: 0.5em;
+}
