@@ -29,15 +29,16 @@ export default {
   },
 
   created() {
+    useAppStore().toolbarImage = this.getBackdropPath();
     this.getMoviesDetails();
   },
 
-  /*
+/*
   beforeUpdate() {
     useAppStore().toolbarImage = this.getBackdropPath();
     this.getMoviesDetails();
   },
-   */
+*/
 
   methods: {
     getReleaseYear() {
