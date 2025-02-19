@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return celsiusTemperature * 1.8 + 32;
         }
 
-        convertedTemperatureInCelsiusLabel.textContent = "Температура в Цельсиях: " + celsiusTemperature + " °C";
+        convertedTemperatureInCelsiusLabel.textContent = "Температура в градусах Цельсия: " + celsiusTemperature + " °C";
         convertedTemperatureInKelvinLabel.textContent = "Температура в Кельвинах: " + convertCelsiusToKelvin(celsiusTemperature) + " °K";
-        convertedTemperatureInFahrenheitLabel.textContent = "Температура в Фаренгейтах: " + convertCelsiusToFahrenheit(celsiusTemperature) + " °F";
+        convertedTemperatureInFahrenheitLabel.textContent = "Температура в градусах Фаренгейта: " + convertCelsiusToFahrenheit(celsiusTemperature) + " °F";
     });
 });
